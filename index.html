@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sameer Abdullah — Cybersecurity &amp; AI</title>
+<meta name="description" content="Sameer Abdullah — Computer Science student specializing in Cybersecurity and Artificial Intelligence.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --bg-0:#0B0F14;
+  --bg-1:#10151D;
+  --bg-2:#151B24;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.16);
+  --text:#F1F5F9;
+  --text-dim:#94A3B8;
+  --text-faint:#5B6B7D;
+  --accent:#3ECF8E;
+  --accent-soft:rgba(62,207,142,0.10);
+  --accent-border:rgba(62,207,142,0.35);
+  --amber:#E8B339;
+  --amber-soft:rgba(232,179,57,0.10);
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-display:'Space Grotesk',-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --dur:1;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-reduced-motion: reduce){ :root{ --dur:0; } }
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  background:var(--bg-0);
+  color:var(--text);
+  font-family:var(--font-sans);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  position:relative;
+  overflow-x:hidden;
+}
+::selection{ background:var(--accent); color:#06110B; }
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; }
+button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:2px; }
+img,svg{ display:block; max-width:100%; }
+
+.wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+@media (max-width:640px){ .wrap{ padding:0 20px; } }
+
+/* ---------------- BACKGROUND FX ---------------- */
+.bg-grid{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:64px 64px;
+  opacity:0.35;
+  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black 20%, transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black 20%, transparent 75%);
+}
+.bg-glow{
+  position:absolute; top:-120px; left:50%;
+  width:900px; height:600px; transform:translateX(-50%);
+  background:radial-gradient(closest-side, rgba(62,207,142,0.14), transparent 70%);
+  filter:blur(10px);
+  z-index:0; pointer-events:none;
+  animation:glow-drift calc(24s / max(var(--dur),0.001)) ease-in-out infinite;
+}
+@keyframes glow-drift{
+  0%,100%{ transform:translateX(-50%) translateY(0); }
+  50%{ transform:translateX(-52%) translateY(18px); }
+}
+
+section, header, footer{ position:relative; z-index:1; }
+
+/* ---------------- CURSOR SPOTLIGHT ---------------- */
+.cursor-spotlight{
+  position:fixed;
+  top:0; left:0;
+  width:640px; height:640px;
+  margin:-320px 0 0 -320px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(62,207,142,0.16), rgba(62,207,142,0.05) 45%, transparent 72%);
+  transform:translate3d(var(--spot-x, 50vw), var(--spot-y, 50vh), 0);
+  pointer-events:none;
+  z-index:0;
+  opacity:0;
+  transition:opacity 0.4s ease;
+  will-change:transform;
+}
+.cursor-spotlight.active{ opacity:1; }
+@media (hover:none), (pointer:coarse){ .cursor-spotlight{ display:none; } }
+@media (prefers-reduced-motion: reduce){ .cursor-spotlight{ display:none; } }
+
+/* ---------------- REVEAL ---------------- */
+.reveal{ opacity:0; transform:translateY(14px); transition:opacity .5s var(--ease), transform .5s var(--ease); }
+.reveal.in-view{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+/* ---------------- NAV ---------------- */
+.site-nav{
+  position:sticky; top:0; z-index:40;
+  background:rgba(11,15,20,0.82);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  max-width:1120px; margin:0 auto; padding:16px 28px;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+}
+.nav-logo{
+  font-family:var(--font-mono); font-size:13px; font-weight:600;
+  letter-spacing:0.02em;
+}
+.nav-links{ display:flex; align-items:center; gap:26px; }
+.nav-links a{
+  font-size:13px; font-weight:500; color:var(--text-dim);
+  letter-spacing:0.03em; position:relative; padding:4px 0;
+  transition:color 0.2s ease;
+}
+.nav-links a::after{
+  content:""; position:absolute; left:0; right:0; bottom:-2px; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:left;
+  transition:transform 0.2s ease;
+}
+.nav-links a:hover{ color:var(--text); }
+.nav-links a.active{ color:var(--text); }
+.nav-links a.active::after{ transform:scaleX(1); }
+
+.status-pill{
+  display:flex; align-items:center; gap:7px;
+  font-family:var(--font-mono); font-size:11px; color:var(--text-dim);
+  border:1px solid var(--border); border-radius:20px; padding:5px 12px;
+  white-space:nowrap;
+}
+.status-dot{
+  width:6px; height:6px; border-radius:50%; background:var(--accent);
+  box-shadow:0 0 0 0 rgba(62,207,142,0.5);
+  animation:pulse-dot calc(2s / max(var(--dur),0.001)) ease-in-out infinite;
+}
+@keyframes pulse-dot{
+  0%{ box-shadow:0 0 0 0 rgba(62,207,142,0.45); }
+  70%{ box-shadow:0 0 0 6px rgba(62,207,142,0); }
+  100%{ box-shadow:0 0 0 0 rgba(62,207,142,0); }
+}
+
+.nav-toggle{
+  display:none; background:none; border:1px solid var(--border); border-radius:6px;
+  width:36px; height:36px; color:var(--text); font-size:16px; cursor:pointer;
+}
+.mobile-menu{
+  display:none; flex-direction:column; gap:2px; padding:8px 20px 18px;
+  border-bottom:1px solid var(--border); background:var(--bg-0);
+}
+.mobile-menu a{
+  padding:10px 4px; font-size:14px; color:var(--text-dim); border-bottom:1px solid var(--border);
+}
+.mobile-menu a:last-child{ border-bottom:none; }
+.mobile-menu.open{ display:flex; }
+
+@media (max-width:820px){
+  .nav-links{ display:none; }
+  .status-pill{ display:none; }
+  .nav-toggle{ display:flex; align-items:center; justify-content:center; }
+}
+
+/* ---------------- SECTION HEADER ---------------- */
+.section-pad{ padding:96px 0; border-top:1px solid var(--border); }
+.section-label{
+  font-family:var(--font-mono); font-size:12px; color:var(--accent);
+  letter-spacing:0.08em; margin:0 0 16px;
+}
+.section-heading{
+  font-family:var(--font-display); font-weight:700;
+  font-size:clamp(28px,4vw,42px); line-height:1.15; letter-spacing:-0.01em;
+  margin:0 0 20px; max-width:16ch;
+}
+.section-intro{ color:var(--text-dim); max-width:60ch; margin:0 0 40px; font-size:15.5px; }
+
+/* ---------------- HERO ---------------- */
+.hero{ padding:88px 0 96px; }
+.hero-inner{ max-width:680px; margin:0 auto; text-align:center; }
+
+.terminal{
+  text-align:left; background:var(--bg-1); border:1px solid var(--border);
+  border-radius:10px; overflow:hidden;
+  box-shadow:0 20px 60px -30px rgba(0,0,0,0.6);
+  margin:0 auto 40px;
+}
+.term-bar{
+  display:flex; align-items:center; gap:8px; padding:10px 14px;
+  border-bottom:1px solid var(--border); background:var(--bg-2);
+}
+.term-dot{ width:10px; height:10px; border-radius:50%; }
+.term-dot.r{ background:#E8646A; opacity:0.55; }
+.term-dot.a{ background:var(--amber); opacity:0.55; }
+.term-dot.g{ background:var(--accent); opacity:0.55; }
+.term-title{
+  margin-left:6px; font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint);
+}
+.term-body{
+  font-family:var(--font-mono); font-size:12.5px; line-height:1.75;
+  padding:18px 20px 22px; min-height:250px; color:#B9C4D0;
+  white-space:pre-wrap;
+}
+.term-line{ opacity:0; transform:translateY(3px); }
+.term-line.shown{
+  animation:term-in calc(.28s / max(var(--dur),0.001)) var(--ease) forwards;
+}
+@keyframes term-in{ to{ opacity:1; transform:translateY(0); } }
+.term-ok{ color:var(--accent); }
+.term-status-ok{ color:var(--accent); font-weight:600; }
+.term-status-progress{ color:var(--amber); font-weight:600; }
+.term-cursor{
+  display:inline-block; width:6px; height:12px; background:var(--accent);
+  vertical-align:-2px; margin-left:2px;
+  animation:blink calc(1s / max(var(--dur),0.001)) steps(1) infinite;
+}
+@keyframes blink{ 50%{ opacity:0; } }
+
+.hero-text{ opacity:0; transform:translateY(10px); transition:opacity .5s var(--ease), transform .5s var(--ease); }
+.hero-text.shown{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){ .hero-text{ opacity:1; transform:none; } }
+
+.hero-name{
+  font-family:var(--font-display); font-weight:700; letter-spacing:-0.01em;
+  font-size:clamp(32px,6vw,52px); margin:0 0 8px;
+}
+.hero-role{
+  font-family:var(--font-mono); font-size:14px; color:var(--accent);
+  margin:0 0 6px;
+}
+.hero-role .sep{ color:var(--text-faint); margin:0 6px; }
+.hero-tagline{ color:var(--text-dim); font-size:16px; max-width:46ch; margin:16px auto 30px; }
+
+.btn-row{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:26px; }
+.btn{
+  font-family:var(--font-mono); font-size:12.5px; font-weight:500; letter-spacing:0.02em;
+  padding:12px 20px; border-radius:6px; cursor:pointer; transition:all 0.18s ease;
+  border:1px solid var(--border-strong);
+}
+.btn-primary{ background:var(--accent); color:#06110B; border-color:var(--accent); }
+.btn-primary:hover{ background:#54DDA0; }
+.btn-ghost{ background:transparent; color:var(--text); }
+.btn-ghost:hover{ border-color:var(--accent-border); color:var(--accent); }
+
+.social-row{ display:flex; gap:18px; justify-content:center; }
+.social-row a{
+  display:flex; align-items:center; justify-content:center;
+  width:36px; height:36px; border:1px solid var(--border); border-radius:8px;
+  color:var(--text-dim); transition:color 0.18s ease, border-color 0.18s ease;
+}
+.social-row a:hover{ color:var(--accent); border-color:var(--accent-border); }
+.social-row svg{ width:16px; height:16px; }
+
+/* ---------------- ABOUT ---------------- */
+.about-grid{ display:grid; grid-template-columns:1.3fr 1fr; gap:56px; align-items:start; }
+@media (max-width:800px){ .about-grid{ grid-template-columns:1fr; gap:36px; } }
+.about-copy p{ color:var(--text-dim); font-size:15.5px; margin:0 0 16px; max-width:58ch; }
+
+.profile-card{
+  background:var(--bg-1); border:1px solid var(--border); border-radius:10px;
+  padding:22px 24px;
+}
+.profile-card .card-label{
+  font-family:var(--font-mono); font-size:11px; color:var(--text-faint);
+  letter-spacing:0.1em; margin-bottom:14px;
+}
+.profile-row{
+  display:flex; justify-content:space-between; gap:12px; padding:10px 0;
+  border-top:1px solid var(--border); font-size:13.5px;
+}
+.profile-row:first-of-type{ border-top:none; }
+.profile-row .k{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); letter-spacing:0.05em; padding-top:2px; }
+.profile-row .v{ font-weight:600; text-align:right; }
+
+/* ---------------- EDUCATION + CERTS ---------------- */
+.edu-grid{ display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:start; }
+@media (max-width:800px){ .edu-grid{ grid-template-columns:1fr; gap:32px; } }
+.edu-card{
+  background:var(--bg-1); border:1px solid var(--border); border-radius:10px; padding:26px 28px;
+}
+.edu-school{ font-family:var(--font-display); font-weight:700; font-size:19px; margin-bottom:6px; }
+.edu-degree{ color:var(--text); font-size:14.5px; margin-bottom:2px; }
+.edu-specialty{ color:var(--text-dim); font-size:13.5px; margin-bottom:14px; }
+.edu-meta{
+  display:flex; flex-wrap:wrap; gap:18px; font-family:var(--font-mono); font-size:12px; color:var(--text-faint);
+  padding-top:14px; border-top:1px solid var(--border);
+}
+.edu-meta strong{ color:var(--text-dim); font-weight:600; }
+
+.cert-list{ display:flex; flex-direction:column; gap:12px; }
+.cert-row{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  background:var(--bg-1); border:1px solid var(--border); border-radius:8px; padding:14px 16px;
+}
+.cert-name{ font-size:13.5px; font-weight:500; }
+.cert-badge{
+  font-family:var(--font-mono); font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px;
+  white-space:nowrap; display:flex; align-items:center; gap:5px;
+}
+.cert-badge.done{ background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent-border); }
+.cert-badge.progress{ background:var(--amber-soft); color:var(--amber); border:1px solid rgba(232,179,57,0.35); }
+
+/* ---------------- PROJECTS ---------------- */
+.proj-grid{ display:flex; flex-direction:column; gap:24px; }
+.proj-row-split{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+@media (max-width:800px){ .proj-row-split{ grid-template-columns:1fr; } }
+
+.proj-card{
+  background:var(--bg-1); border:1px solid var(--border); border-radius:12px;
+  padding:32px; transition:border-color 0.2s ease, transform 0.2s ease;
+}
+.proj-card:hover{ border-color:var(--accent-border); transform:translateY(-2px); }
+.proj-card.featured{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:36px; align-items:center; }
+@media (max-width:800px){ .proj-card.featured{ grid-template-columns:1fr; gap:24px; } }
+
+.proj-num{ font-family:var(--font-mono); font-size:12px; color:var(--text-faint); margin-bottom:10px; }
+.proj-name{ font-family:var(--font-display); font-weight:700; font-size:22px; margin:0 0 8px; }
+.proj-card.featured .proj-name{ font-size:27px; }
+.proj-meta-row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:16px; }
+.proj-category{
+  font-family:var(--font-mono); font-size:10.5px; color:var(--accent);
+  letter-spacing:0.06em; border:1px solid var(--accent-border); background:var(--accent-soft);
+  padding:3px 9px; border-radius:20px;
+}
+.proj-date{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); }
+
+.proj-desc{ color:var(--text-dim); font-size:14px; margin:0 0 16px; max-width:56ch; }
+.proj-highlights{ list-style:none; margin:0 0 18px; padding:0; display:flex; flex-direction:column; gap:6px; }
+.proj-highlights li{
+  font-size:13px; color:var(--text-dim); padding-left:16px; position:relative;
+}
+.proj-highlights li::before{
+  content:"›"; position:absolute; left:0; color:var(--accent); font-weight:700;
+}
+.proj-stack{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); margin-bottom:18px; }
+.proj-link{
+  font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--accent);
+  display:inline-flex; align-items:center; gap:6px; transition:gap 0.15s ease;
+}
+.proj-link:hover{ gap:10px; }
+
+/* mock visual panels */
+.mock-panel{
+  background:var(--bg-2); border:1px solid var(--border); border-radius:10px;
+  padding:18px 20px; font-family:var(--font-mono); font-size:12px;
+}
+.mock-title{ color:var(--text-faint); font-size:10.5px; letter-spacing:0.08em; margin-bottom:12px; }
+.mock-target{ color:var(--text); font-size:13px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px dashed var(--border); }
+.mock-row{ display:flex; justify-content:space-between; padding:4px 0; color:var(--text-dim); }
+.mock-row .status-pass{ color:var(--accent); font-weight:600; }
+.mock-row .status-flag{ color:var(--amber); font-weight:600; }
+.mock-threat{
+  margin-top:14px; padding-top:12px; border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.mock-threat .lvl{ color:var(--accent); font-weight:700; }
+.mock-count{ font-variant-numeric:tabular-nums; }
+
+/* ---------------- SKILLS ---------------- */
+.skills-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
+@media (max-width:900px){ .skills-grid{ grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:560px){ .skills-grid{ grid-template-columns:1fr; } }
+.skill-card{
+  background:var(--bg-1); border:1px solid var(--border); border-radius:10px; padding:22px;
+  transition:border-color 0.2s ease, transform 0.2s ease;
+}
+.skill-card:hover{ border-color:var(--accent-border); transform:translateY(-2px); }
+.skill-card-header{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.skill-icon{
+  flex:0 0 auto; width:38px; height:38px; border-radius:9px;
+  background:var(--accent-soft); border:1px solid var(--accent-border);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--accent);
+}
+.skill-icon svg{ width:18px; height:18px; }
+.skill-cat{
+  font-family:var(--font-display); font-size:14.5px; font-weight:700; color:var(--text);
+}
+.skill-pills{ display:flex; flex-wrap:wrap; gap:8px; }
+.skill-pill{
+  font-family:var(--font-mono); font-size:11.5px; color:var(--text-dim);
+  background:var(--bg-2); border:1px solid var(--border); border-radius:6px;
+  padding:6px 10px; transition:border-color 0.15s ease, color 0.15s ease;
+}
+.skill-pill:hover{ border-color:var(--accent-border); color:var(--text); }
+
+/* ---------------- EXPERIENCE ---------------- */
+.timeline{ position:relative; padding-left:32px; }
+.timeline::before{
+  content:""; position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:var(--border);
+}
+.tl-item{ position:relative; padding-bottom:8px; }
+.tl-dot{
+  position:absolute; left:-32px; top:4px; width:11px; height:11px; border-radius:50%;
+  background:var(--bg-0); border:2px solid var(--accent);
+}
+.tl-date{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); margin-bottom:8px; }
+.tl-role{ font-family:var(--font-display); font-weight:700; font-size:19px; margin:0 0 2px; }
+.tl-org{ color:var(--text-dim); font-size:13.5px; margin-bottom:14px; }
+.tl-bullets{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; max-width:60ch; }
+.tl-bullets li{ font-size:14px; color:var(--text-dim); padding-left:18px; position:relative; }
+.tl-bullets li::before{ content:"›"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+
+/* ---------------- LIVE DEMO ---------------- */
+.demo-section{ padding:88px 0; border-top:1px solid var(--border); }
+.demo-intro{ color:var(--text-dim); font-size:15px; max-width:62ch; margin:0 0 8px; }
+.demo-note{
+  font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint);
+  margin:0 0 32px; display:flex; align-items:center; gap:7px;
+}
+.demo-note .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
+
+.demo-panel{
+  background:var(--bg-1); border:1px solid var(--border); border-radius:12px; overflow:hidden;
+}
+.demo-input-row{
+  display:flex; gap:10px; padding:20px; border-bottom:1px solid var(--border); flex-wrap:wrap;
+}
+.demo-input{
+  flex:1; min-width:220px; background:var(--bg-2); border:1px solid var(--border);
+  border-radius:6px; padding:12px 14px; color:var(--text); font-family:var(--font-mono);
+  font-size:13px;
+}
+.demo-input:focus{ outline:none; border-color:var(--accent-border); }
+.demo-input::placeholder{ color:var(--text-faint); }
+.demo-scan-btn{
+  font-family:var(--font-mono); font-size:12.5px; font-weight:600; letter-spacing:0.02em;
+  padding:12px 22px; border-radius:6px; border:1px solid var(--accent);
+  background:var(--accent); color:#06110B; cursor:pointer; transition:background 0.15s ease;
+  white-space:nowrap;
+}
+.demo-scan-btn:hover{ background:#54DDA0; }
+.demo-scan-btn:disabled{ opacity:0.6; cursor:default; }
+
+.demo-examples{ display:flex; flex-wrap:wrap; gap:8px; padding:14px 20px; border-bottom:1px solid var(--border); }
+.demo-example-btn{
+  font-family:var(--font-mono); font-size:11px; color:var(--text-dim);
+  background:transparent; border:1px solid var(--border); border-radius:20px;
+  padding:5px 12px; cursor:pointer; transition:border-color 0.15s ease, color 0.15s ease;
+}
+.demo-example-btn:hover{ border-color:var(--accent-border); color:var(--accent); }
+
+.demo-results{ padding:22px 20px 26px; display:none; }
+.demo-results.active{ display:block; }
+.demo-placeholder{ padding:32px 20px; text-align:center; color:var(--text-faint); font-family:var(--font-mono); font-size:12.5px; }
+
+.demo-summary{
+  display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-bottom:20px;
+  padding-bottom:20px; border-bottom:1px solid var(--border);
+}
+.demo-risk-badge{
+  font-family:var(--font-mono); font-weight:700; font-size:13px; letter-spacing:0.04em;
+  padding:7px 14px; border-radius:6px; white-space:nowrap;
+}
+.demo-risk-badge.low{ background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent-border); }
+.demo-risk-badge.medium{ background:var(--amber-soft); color:var(--amber); border:1px solid rgba(232,179,57,0.35); }
+.demo-risk-badge.high{ background:rgba(232,100,106,0.10); color:#E8646A; border:1px solid rgba(232,100,106,0.35); }
+.demo-risk-badge.critical{ background:rgba(232,100,106,0.16); color:#F08890; border:1px solid rgba(232,100,106,0.5); }
+.demo-score{ font-family:var(--font-mono); font-size:12px; color:var(--text-dim); }
+.demo-host{ font-family:var(--font-mono); font-size:12px; color:var(--text-faint); word-break:break-all; }
+
+.demo-categories{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.demo-cat-chip{
+  font-family:var(--font-mono); font-size:11px; color:var(--amber);
+  background:var(--amber-soft); border:1px solid rgba(232,179,57,0.3);
+  padding:4px 10px; border-radius:20px;
+}
+
+.demo-log-label{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); letter-spacing:0.08em; margin-bottom:10px; }
+.demo-log{ display:flex; flex-direction:column; gap:1px; }
+.demo-log-row{
+  display:flex; gap:10px; padding:9px 10px; border-radius:6px; font-size:12.5px;
+  border-left:2px solid var(--border);
+}
+.demo-log-row.triggered.low{ border-left-color:var(--accent); background:var(--accent-soft); }
+.demo-log-row.triggered.medium{ border-left-color:var(--amber); background:var(--amber-soft); }
+.demo-log-row.triggered.high{ border-left-color:#E8646A; background:rgba(232,100,106,0.07); }
+.demo-log-row.triggered.critical{ border-left-color:#E8646A; background:rgba(232,100,106,0.12); }
+.demo-log-row.info{ opacity:0.4; }
+.demo-log-icon{ font-family:var(--font-mono); flex:0 0 auto; width:16px; text-align:center; }
+.demo-log-body .lbl{ font-weight:600; margin-bottom:2px; }
+.demo-log-body .det{ color:var(--text-dim); font-size:12px; }
+.demo-log-row.info .det{ display:none; }
+
+.demo-error{ color:#F08890; font-family:var(--font-mono); font-size:12.5px; padding:20px; }
+
+@media (max-width:600px){
+  .demo-input-row{ flex-direction:column; }
+  .demo-scan-btn{ width:100%; }
+}
+
+/* ---------------- CONTACT ---------------- */
+.contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+@media (max-width:800px){ .contact-grid{ grid-template-columns:1fr; gap:32px; } }
+.contact-term{
+  background:var(--bg-1); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+}
+.contact-term .term-body{ min-height:0; padding:20px 22px; color:#B9C4D0; }
+.contact-invite h3{ font-family:var(--font-display); font-size:22px; margin:0 0 10px; }
+.contact-invite p{ color:var(--text-dim); font-size:14.5px; margin:0 0 24px; max-width:44ch; }
+.contact-links{ display:flex; flex-direction:column; gap:10px; }
+.contact-link-row{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 16px; border:1px solid var(--border); border-radius:8px;
+  transition:border-color 0.18s ease, background 0.18s ease;
+}
+.contact-link-row:hover{ border-color:var(--accent-border); background:var(--accent-soft); }
+.contact-link-row .lbl{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); letter-spacing:0.06em; }
+.contact-link-row .val{ font-size:13.5px; font-weight:500; }
+
+/* ---------------- FOOTER ---------------- */
+footer{ border-top:1px solid var(--border); padding:48px 0 32px; }
+.foot-top{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; margin-bottom:28px; }
+.foot-name{ font-family:var(--font-display); font-weight:700; font-size:16px; margin-bottom:4px; }
+.foot-sub{ color:var(--text-faint); font-size:13px; }
+.foot-links{ display:flex; gap:18px; }
+.foot-links a{ font-size:13px; color:var(--text-dim); }
+.foot-links a:hover{ color:var(--accent); }
+.foot-status{
+  font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint);
+  display:flex; justify-content:space-between; padding-top:20px; border-top:1px solid var(--border);
+}
+.foot-status .ok{ color:var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="cursor-spotlight" id="cursorSpotlight" aria-hidden="true"></div>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <span class="nav-logo">SAMEER ABDULLAH</span>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#about" data-section="about">ABOUT</a>
+      <a href="#education" data-section="education">EDUCATION</a>
+      <a href="#projects" data-section="projects">PROJECTS</a>
+      <a href="#skills" data-section="skills">SKILLS</a>
+      <a href="#experience" data-section="experience">EXPERIENCE</a>
+      <a href="#demo" data-section="demo">DEMO</a>
+      <a href="#contact" data-section="contact">CONTACT</a>
+    </nav>
+    <div class="status-pill"><span class="status-dot" aria-hidden="true"></span>OPEN TO OPPORTUNITIES</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">ABOUT</a>
+    <a href="#education">EDUCATION</a>
+    <a href="#projects">PROJECTS</a>
+    <a href="#skills">SKILLS</a>
+    <a href="#experience">EXPERIENCE</a>
+    <a href="#demo">DEMO</a>
+    <a href="#contact">CONTACT</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-label="Introduction">
+    <div class="bg-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+
+      <div class="terminal">
+        <div class="term-bar">
+          <span class="term-dot r"></span><span class="term-dot a"></span><span class="term-dot g"></span>
+          <span class="term-title">sameer@portfolio — zsh</span>
+        </div>
+        <div class="term-body" id="termBody"></div>
+      </div>
+
+      <div class="hero-text" id="heroText">
+        <h1 class="hero-name">SAMEER ABDULLAH</h1>
+        <p class="hero-role">Computer Science Student<span class="sep">/</span>Cybersecurity &amp; Artificial Intelligence</p>
+        <p class="hero-tagline">Building security tools, analyzing systems, and developing software that solves real problems.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#projects">VIEW PROJECTS</a>
+          <a class="btn btn-ghost" href="resume.pdf" target="_blank" rel="noopener">VIEW RESUME</a>
+          <a class="btn btn-ghost" href="#contact">CONTACT ME</a>
+        </div>
+        <div class="social-row">
+          <a href="https://github.com/Intentity" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.5 0-.24-.01-1.04-.01-1.88-2.78.62-3.37-1.22-3.37-1.22-.45-1.18-1.11-1.5-1.11-1.5-.9-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.15-4.56-5.11 0-1.13.39-2.05 1.03-2.77-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.06a9.2 9.2 0 0 1 5 0c1.91-1.34 2.75-1.06 2.75-1.06.55 1.42.2 2.47.1 2.73.64.72 1.03 1.64 1.03 2.77 0 3.97-2.34 4.85-4.57 5.1.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .28.18.6.69.5A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/sameer-abdullah-508268273" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5H3.56V20H6.94V8.5ZM5.25 7c1.11 0 1.94-.85 1.94-1.9C7.19 4.05 6.36 3.2 5.25 3.2S3.31 4.05 3.31 5.1c0 1.05.82 1.9 1.94 1.9ZM20.44 20h-3.37v-6c0-1.5-.03-3.43-2.1-3.43-2.1 0-2.42 1.63-2.42 3.32V20H9.19V8.5h3.24v1.57h.05c.45-.85 1.55-1.75 3.19-1.75 3.41 0 4.04 2.24 4.04 5.16V20Z"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section id="about" class="section-pad" aria-label="About">
+    <div class="wrap">
+      <p class="section-label reveal">01 / ABOUT</p>
+      <div class="about-grid">
+        <div class="about-copy reveal">
+          <h2 class="section-heading">SECURITY-MINDED.<br>SYSTEM-FOCUSED.</h2>
+          <p>I'm a senior Computer Science student at Cal State LA (CSULA) specializing in Cybersecurity and Artificial Intelligence, and most of my growth has come from pushing myself to learn outside the classroom. I like building things that challenge me — especially when I have to figure out something I haven't worked with before.</p>
+          <p>That's shown up in tools like an offline URL threat scanner and a network traffic analyzer, in the Google Cybersecurity Professional Certificate (with CompTIA Security+ in progress), and right now in a senior design project I'm building with a larger team. I'm looking for an opportunity where I can contribute what I know, learn from people more experienced than me, and keep becoming a better engineer.</p>
+          <p style="color:var(--text-dim); font-size:15.5px; margin-top:24px; padding-top:20px; border-top:1px solid var(--border);"><strong style="color:var(--text); font-size:15.5px; display:block; margin-bottom:8px;">Beyond the Screen</strong>Outside of school and work, I'm usually playing basketball, hiking, traveling with friends and family, or hunting down a new place to eat. Being outdoors and meeting new people keeps me curious — and I try to carry that same mindset into my work: explore, learn, and don't stay in one place.</p>
+        </div>
+        <div class="profile-card reveal">
+          <div class="card-label">SYSTEM PROFILE</div>
+          <div class="profile-row"><span class="k">ROLE</span><span class="v">Computer Science Student</span></div>
+          <div class="profile-row"><span class="k">CLASS STANDING</span><span class="v">Senior</span></div>
+          <div class="profile-row"><span class="k">SPECIALIZATION</span><span class="v">Cybersecurity + AI</span></div>
+          <div class="profile-row"><span class="k">LOCATION</span><span class="v">Los Angeles, CA</span></div>
+          <div class="profile-row"><span class="k">GPA</span><span class="v">3.5</span></div>
+          <div class="profile-row"><span class="k">STATUS</span><span class="v">Currently Enrolled</span></div>
+          <div class="profile-row"><span class="k">GRADUATION</span><span class="v">2027</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EDUCATION + CERTS ================= -->
+  <section id="education" class="section-pad" aria-label="Education and certifications">
+    <div class="wrap">
+      <p class="section-label reveal">EDUCATION &amp; CERTIFICATIONS</p>
+      <div class="edu-grid">
+        <div class="edu-card reveal">
+          <div class="edu-school">California State University, Los Angeles</div>
+          <div class="edu-degree">Bachelor of Science in Computer Science</div>
+          <div class="edu-specialty">Specialty: Cybersecurity &amp; Artificial Intelligence</div>
+          <div class="edu-meta">
+            <span><strong>2022 — 2027</strong></span>
+            <span>GPA: <strong>3.5</strong></span>
+            <span><strong>Senior</strong></span>
+            <span><strong>Currently Enrolled</strong></span>
+          </div>
+        </div>
+        <div class="cert-list reveal">
+          <div class="cert-row">
+            <span class="cert-name">Google Cybersecurity Professional Certificate</span>
+            <span class="cert-badge done">✓ COMPLETED</span>
+          </div>
+          <div class="cert-row">
+            <span class="cert-name">CompTIA Security+</span>
+            <span class="cert-badge progress">◐ IN PROGRESS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section id="projects" class="section-pad" aria-label="Projects">
+    <div class="wrap">
+      <p class="section-label reveal">02 / PROJECTS</p>
+      <h2 class="section-heading reveal">SECURITY TOOLS.<br>SOFTWARE.<br>SYSTEMS.</h2>
+
+      <div class="proj-grid">
+        <!-- PROJECT 01 -->
+        <article class="proj-card featured reveal">
+          <div>
+            <div class="proj-num">01</div>
+            <h3 class="proj-name">Link Scanner</h3>
+            <div class="proj-meta-row">
+              <span class="proj-category">THREAT DETECTION / URL ANALYSIS</span>
+              <span class="proj-date">JUL 2026</span>
+            </div>
+            <p class="proj-desc">A full-stack offline threat-detection web app that analyzes URLs using <span class="mock-count" data-count="19">0</span> independent heuristics to flag phishing, malware-delivery, and ransomware/scam patterns — with no external APIs.</p>
+            <ul class="proj-highlights">
+              <li>Shannon entropy analysis for algorithmically-generated domains</li>
+              <li>Levenshtein-distance typosquatting detection</li>
+              <li>Punycode / homograph identification</li>
+              <li>Disguised file-extension analysis</li>
+              <li>Fixed a compound-TLD parsing edge case that was misclassifying a real phishing domain</li>
+            </ul>
+            <div class="proj-stack">Python · Flask · JavaScript</div>
+            <a class="proj-link" href="https://github.com/Intentity/link-scanner" target="_blank" rel="noopener">VIEW PROJECT →</a>
+          </div>
+          <div class="mock-panel" aria-hidden="true">
+            <div class="mock-title">URL ANALYSIS</div>
+            <div class="mock-target">example.com</div>
+            <div class="mock-row"><span>entropy</span><span>LOW</span></div>
+            <div class="mock-row"><span>typosquatting</span><span class="status-pass">PASS</span></div>
+            <div class="mock-row"><span>punycode</span><span class="status-pass">PASS</span></div>
+            <div class="mock-row"><span>extension</span><span class="status-pass">PASS</span></div>
+            <div class="mock-row"><span>heuristics</span><span>19/19</span></div>
+            <div class="mock-threat"><span>THREAT LEVEL</span><span class="lvl">LOW</span></div>
+          </div>
+        </article>
+
+        <div class="proj-row-split">
+          <!-- PROJECT 02 -->
+          <article class="proj-card reveal">
+            <div class="proj-num">02</div>
+            <h3 class="proj-name">Network Traffic Analyzer</h3>
+            <div class="proj-meta-row">
+              <span class="proj-category">NETWORK MONITORING / IOC ANALYSIS</span>
+              <span class="proj-date">JUN 2026</span>
+            </div>
+            <p class="proj-desc">A Python tool built on Scapy that parses packet captures to detect indicators of compromise: port scans, anomalous DNS activity, and plaintext credential exposure.</p>
+            <ul class="proj-highlights">
+              <li>Traced a real Xworm RAT sample over two weeks of manual analysis</li>
+              <li>Identified a sustained-session C2 signature initial detectors missed</li>
+              <li>Built a new detector that correctly flagged both malicious IPs</li>
+            </ul>
+            <div class="proj-stack">Python · Scapy</div>
+            <a class="proj-link" href="https://github.com/Intentity/network-traffic-analyzer" target="_blank" rel="noopener">VIEW PROJECT →</a>
+            <div class="mock-panel" style="margin-top:18px;" aria-hidden="true">
+              <div class="mock-title">PACKET ANALYSIS</div>
+              <div class="mock-row"><span>TCP</span><span class="mock-count" data-count="482">0</span></div>
+              <div class="mock-row"><span>UDP</span><span class="mock-count" data-count="193">0</span></div>
+              <div class="mock-row"><span>DNS</span><span class="mock-count" data-count="87">0</span></div>
+              <div class="mock-row"><span>HTTP</span><span class="mock-count" data-count="24">0</span></div>
+              <div class="mock-threat">
+                <span>IOC STATUS</span>
+              </div>
+              <div class="mock-row"><span>PORT SCAN</span><span class="status-flag">DETECTED</span></div>
+              <div class="mock-row"><span>ANOMALOUS DNS</span><span class="status-flag">DETECTED</span></div>
+              <div class="mock-row"><span>C2 SIGNATURE</span><span class="status-flag">DETECTED</span></div>
+            </div>
+          </article>
+
+          <!-- PROJECT 03 -->
+          <article class="proj-card reveal">
+            <div class="proj-num">03</div>
+            <h3 class="proj-name">LA Resource Hub</h3>
+            <div class="proj-meta-row">
+              <span class="proj-category">MOBILE APPLICATION / FULL STACK</span>
+              <span class="proj-date">JAN – MAY 2026</span>
+            </div>
+            <p class="proj-desc">A cross-platform mobile app connecting users to housing, food, and mental health resources across Los Angeles, with map-based search and location filtering.</p>
+            <ul class="proj-highlights">
+              <li>Offline access, push notifications, multi-language support</li>
+              <li>Reconstructed and documented the full project after the original repo was lost</li>
+              <li>Built and shipped within an Agile team environment</li>
+            </ul>
+            <div class="proj-stack">React Native · TypeScript · Supabase</div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SKILLS ================= -->
+  <section id="skills" class="section-pad" aria-label="Skills">
+    <div class="wrap">
+      <p class="section-label reveal">03 / SKILLS</p>
+      <h2 class="section-heading reveal">TOOLS I ACTUALLY USE.</h2>
+      <div class="skills-grid">
+        <div class="skill-card reveal">
+          <div class="skill-card-header">
+            <span class="skill-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            </span>
+            <span class="skill-cat">Cybersecurity</span>
+          </div>
+          <div class="skill-pills">
+            <span class="skill-pill">Threat Detection</span>
+            <span class="skill-pill">Malware Analysis</span>
+            <span class="skill-pill">Vulnerability Assessment</span>
+            <span class="skill-pill">Penetration Testing</span>
+            <span class="skill-pill">IAM</span>
+            <span class="skill-pill">SIEM &amp; Log Analysis</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-header">
+            <span class="skill-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a16 16 0 0 1 20 0"/><path d="M5.5 12.5a11 11 0 0 1 13 0"/><path d="M9 16.5a6 6 0 0 1 6 0"/><circle cx="12" cy="20" r="1"/></svg>
+            </span>
+            <span class="skill-cat">Networking</span>
+          </div>
+          <div class="skill-pills">
+            <span class="skill-pill">TCP/IP</span>
+            <span class="skill-pill">DNS</span>
+            <span class="skill-pill">HTTP/HTTPS</span>
+            <span class="skill-pill">Firewalls</span>
+            <span class="skill-pill">VPN</span>
+            <span class="skill-pill">Subnetting</span>
+            <span class="skill-pill">OSI Model</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-header">
+            <span class="skill-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
+            </span>
+            <span class="skill-cat">Programming</span>
+          </div>
+          <div class="skill-pills">
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">Java</span>
+            <span class="skill-pill">C++</span>
+            <span class="skill-pill">TypeScript</span>
+            <span class="skill-pill">HTML/CSS</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-header">
+            <span class="skill-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6"/></svg>
+            </span>
+            <span class="skill-cat">Systems</span>
+          </div>
+          <div class="skill-pills">
+            <span class="skill-pill">Linux</span>
+            <span class="skill-pill">Kali</span>
+            <span class="skill-pill">Ubuntu</span>
+            <span class="skill-pill">Windows Administration</span>
+            <span class="skill-pill">Active Directory</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-header">
+            <span class="skill-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </span>
+            <span class="skill-cat">Tools</span>
+          </div>
+          <div class="skill-pills">
+            <span class="skill-pill">Scapy</span>
+            <span class="skill-pill">Wireshark</span>
+            <span class="skill-pill">Splunk</span>
+            <span class="skill-pill">Nmap</span>
+            <span class="skill-pill">Burp Suite</span>
+            <span class="skill-pill">Metasploit</span>
+            <span class="skill-pill">Git / GitHub</span>
+            <span class="skill-pill">Microsoft 365</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-header">
+            <span class="skill-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </span>
+            <span class="skill-cat">Frameworks &amp; Platforms</span>
+          </div>
+          <div class="skill-pills">
+            <span class="skill-pill">Flask</span>
+            <span class="skill-pill">React Native</span>
+            <span class="skill-pill">Supabase</span>
+            <span class="skill-pill">Git / GitHub</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-header">
+            <span class="skill-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2a3.5 3.5 0 0 0-3.5 3.5V6a3 3 0 0 0-1.5 5.5A3 3 0 0 0 6 17h.5a3.5 3.5 0 0 0 3 3.44V21"/><path d="M14.5 2A3.5 3.5 0 0 1 18 5.5V6a3 3 0 0 1 1.5 5.5A3 3 0 0 1 18 17h-.5a3.5 3.5 0 0 1-3 3.44V21"/><path d="M9.5 9a1.5 1.5 0 0 1 3 0M14.5 9a1.5 1.5 0 0 0-3 0"/></svg>
+            </span>
+            <span class="skill-cat">AI &amp; Analysis</span>
+          </div>
+          <div class="skill-pills">
+            <span class="skill-pill">Heuristic Analysis</span>
+            <span class="skill-pill">Threat Classification</span>
+            <span class="skill-pill">Pattern Recognition</span>
+            <span class="skill-pill">URL Analysis</span>
+            <span class="skill-pill">Malware Indicator Analysis</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <section id="experience" class="section-pad" aria-label="Experience">
+    <div class="wrap">
+      <p class="section-label reveal">04 / EXPERIENCE</p>
+      <h2 class="section-heading reveal">REAL-WORLD EXPERIENCE.</h2>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-date">2023 — JUN 2026</div>
+          <div class="tl-role">Pharmacy Teller</div>
+          <div class="tl-org">CVS Pharmacy · Los Angeles, CA</div>
+          <ul class="tl-bullets">
+            <li>Delivered technical and operational support in a high-volume, fast-paced environment, including inventory systems and stock-level monitoring.</li>
+            <li>Resolved hundreds of customer inquiries and calls per day within service-time expectations.</li>
+            <li>Coordinated with pharmacists and teammates on point-of-sale transactions and compliance procedures.</li>
+            <li>Trained new team members on operational protocols and customer service standards.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LIVE DEMO ================= -->
+  <section class="demo-section" id="demo" aria-label="Live link scanner demo">
+    <div class="wrap">
+      <p class="section-label reveal">LIVE DEMO</p>
+      <h2 class="section-heading reveal">TRY THE LINK SCANNER.</h2>
+      <p class="demo-intro reveal">This is a JavaScript port of the same 19 heuristics that power my <a href="https://github.com/Intentity/link-scanner" target="_blank" rel="noopener" style="color:var(--accent);">Link Scanner</a> project — entropy analysis, typosquatting, punycode detection, disguised extensions, and more. Paste a URL below and it'll run entirely in your browser.</p>
+      <p class="demo-note reveal"><span class="dot" aria-hidden="true"></span>Runs 100% client-side. Nothing is sent anywhere — it never visits or fetches the URL, it only analyzes the text of the string itself.</p>
+
+      <div class="demo-panel reveal">
+        <div class="demo-input-row">
+          <input type="text" class="demo-input" id="demoInput" placeholder="e.g. paypa1-secure.tk/invoice.pdf.exe" aria-label="URL to analyze">
+          <button class="demo-scan-btn" id="demoScanBtn">ANALYZE</button>
+        </div>
+        <div class="demo-examples">
+          <button class="demo-example-btn" data-url="https://github.com/Intentity">Try: a normal URL</button>
+          <button class="demo-example-btn" data-url="http://paypa1-secure.tk/account/verify.php?redirect=http://evil.io">Try: suspicious pattern</button>
+          <button class="demo-example-btn" data-url="http://192.168.4.10:8080/update/install.scr">Try: raw IP + executable</button>
+        </div>
+        <div class="demo-placeholder" id="demoPlaceholder">$ awaiting input — paste a URL and hit ANALYZE</div>
+        <div class="demo-results" id="demoResults"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact" class="section-pad" aria-label="Contact">
+    <div class="wrap">
+      <p class="section-label reveal">05 / CONTACT</p>
+      <div class="contact-grid">
+        <div class="contact-term reveal">
+          <div class="term-bar">
+            <span class="term-dot r"></span><span class="term-dot a"></span><span class="term-dot g"></span>
+            <span class="term-title">contact.sh</span>
+          </div>
+          <div class="term-body">$ ./contact.sh
+
+connection.status = <span class="term-ok">"OPEN"</span>
+awaiting_input <span class="term-cursor"></span></div>
+        </div>
+        <div class="contact-invite reveal">
+          <h3>Interested in working together?</h3>
+          <p>Let's build something useful.</p>
+          <div class="contact-links">
+            <a class="contact-link-row" href="mailto:abdusameer0001@gmail.com">
+              <span class="lbl">EMAIL</span><span class="val">abdusameer0001@gmail.com</span>
+            </a>
+            <a class="contact-link-row" href="https://linkedin.com/in/sameer-abdullah-508268273" target="_blank" rel="noopener">
+              <span class="lbl">LINKEDIN</span><span class="val">sameer-abdullah-508268273</span>
+            </a>
+            <a class="contact-link-row" href="https://github.com/Intentity" target="_blank" rel="noopener">
+              <span class="lbl">GITHUB</span><span class="val">Intentity</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-name">Sameer Abdullah</div>
+        <div class="foot-sub">Computer Science — Cybersecurity + Artificial Intelligence</div>
+        <div class="foot-sub">Los Angeles, CA</div>
+      </div>
+      <div class="foot-links">
+        <a href="https://github.com/Intentity" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/sameer-abdullah-508268273" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:abdusameer0001@gmail.com">Email</a>
+      </div>
+    </div>
+    <div class="foot-status">
+      <span>system.status = <span class="ok">"ONLINE"</span></span>
+      <span>© 2026 Sameer Abdullah</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- TERMINAL BOOT SEQUENCE ---------------- */
+  var lines = [
+    { text: "$ ./initialize --profile sameer_abdullah" },
+    { text: "" },
+    { text: "loading heuristics............... 19 modules" },
+    { text: "loading security_tools........... ", ok: "OK" },
+    { text: "loading projects................. ", ok: "OK" },
+    { text: "" },
+    { text: "threat_detection ................ ", ok: "PRESENT" },
+    { text: "network_analysis ................ ", ok: "PRESENT" },
+    { text: "systems_admin .................... ", ok: "PRESENT" },
+    { text: "software_development ............ ", ok: "PRESENT" },
+    { text: "" },
+    { text: "cybersecurity_cert .............. ", status: "COMPLETE", cls: "term-status-ok" },
+    { text: "security_plus .................... ", status: "IN PROGRESS", cls: "term-status-progress" },
+    { text: "" },
+    { text: "education ....................... CS / CYBERSECURITY + AI" },
+    { text: "" },
+    { text: "profile.status .................. ", status: "READY", cls: "term-status-ok" },
+    { text: "" },
+    { text: "> system initialized", cursor: true }
+  ];
+
+  var termBody = document.getElementById('termBody');
+  var heroText = document.getElementById('heroText');
+
+  function buildLineHTML(line){
+    var html = line.text || "";
+    if (line.ok) html += '<span class="term-ok">' + line.ok + '</span>';
+    if (line.status) html = '<span>' + html + '</span><span class="' + line.cls + '">' + line.status + '</span>';
+    if (line.cursor) html += '<span class="term-cursor"></span>';
+    return html;
+  }
+
+  function renderInstant(){
+    var html = "";
+    lines.forEach(function(line){
+      html += '<div class="term-line shown">' + buildLineHTML(line) + '</div>';
+    });
+    termBody.innerHTML = html;
+    heroText.classList.add('shown');
+  }
+
+  function renderAnimated(){
+    var i = 0;
+    function next(){
+      if (i >= lines.length){
+        setTimeout(function(){ heroText.classList.add('shown'); }, 150);
+        return;
+      }
+      var div = document.createElement('div');
+      div.className = 'term-line';
+      div.innerHTML = buildLineHTML(lines[i]);
+      termBody.appendChild(div);
+      requestAnimationFrame(function(){ div.classList.add('shown'); });
+      i++;
+      setTimeout(next, 70);
+    }
+    next();
+  }
+
+  if (reduceMotion){ renderInstant(); } else { renderAnimated(); }
+
+  /* ---------------- SCROLL REVEAL ---------------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  }
+
+  /* ---------------- STAT COUNTERS ---------------- */
+  var counters = document.querySelectorAll('.mock-count');
+  function animateCounter(el){
+    var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    if (reduceMotion){ el.textContent = target; return; }
+    var start = 0;
+    var duration = 700;
+    var startTime = null;
+    function step(ts){
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      el.textContent = Math.round(start + (target - start) * progress);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window){
+    var cio = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          animateCounter(entry.target);
+          cio.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function(el){ cio.observe(el); });
+  } else {
+    counters.forEach(function(el){ el.textContent = el.getAttribute('data-count'); });
+  }
+
+  /* ---------------- NAV SCROLLSPY ---------------- */
+  var navLinks = document.querySelectorAll('.nav-links a[data-section]');
+  var sections = Array.from(navLinks).map(function(a){ return document.getElementById(a.dataset.section); }).filter(Boolean);
+
+  function onScroll(){
+    var pos = window.scrollY + window.innerHeight * 0.3;
+    var current = sections[0];
+    sections.forEach(function(sec){ if (sec.offsetTop <= pos) current = sec; });
+    navLinks.forEach(function(a){ a.classList.toggle('active', a.dataset.section === current.id); });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------------- CURSOR-FOLLOWING SPOTLIGHT ---------------- */
+  (function(){
+    var spot = document.getElementById('cursorSpotlight');
+    var supportsHover = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    if (reduceMotion || !supportsHover) return;
+
+    var targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
+    var curX = targetX, curY = targetY;
+    var activated = false;
+
+    window.addEventListener('mousemove', function(e){
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!activated){ activated = true; spot.classList.add('active'); }
+    }, { passive: true });
+
+    function frame(){
+      curX += (targetX - curX) * 0.12;
+      curY += (targetY - curY) * 0.12;
+      spot.style.setProperty('--spot-x', curX + 'px');
+      spot.style.setProperty('--spot-y', curY + 'px');
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  /* ---------------- LINK SCANNER (JS port of analyzer.py) ---------------- */
+  var LinkScanner = (function(){
+    var SEVERITY_WEIGHTS = { critical: 30, high: 20, medium: 10, low: 5 };
+
+    var SUSPICIOUS_TLDS = ["tk","ml","ga","cf","gq","xyz","top","work","click","link",
+      "support","gdn","loan","men","date","party","review","zip","mov","country","stream","download","fit"];
+
+    var URL_SHORTENERS = ["bit.ly","tinyurl.com","t.co","goo.gl","ow.ly","is.gd","buff.ly",
+      "adf.ly","cutt.ly","shorturl.at","rebrand.ly","rb.gy","s.id","tiny.cc","bl.ink"];
+
+    var SUSPICIOUS_EXTENSIONS = {
+      ".exe": ["critical","Windows executable / Trojan dropper"],
+      ".scr": ["critical","Screensaver executable (common Trojan disguise)"],
+      ".msi": ["high","Windows installer package"],
+      ".bat": ["high","Batch script (dropper/loader)"],
+      ".cmd": ["high","Batch script (dropper/loader)"],
+      ".ps1": ["high","PowerShell script (dropper/loader)"],
+      ".vbs": ["high","VBScript (common macro-malware payload)"],
+      ".js": ["medium","JavaScript payload"],
+      ".jar": ["high","Java archive (cross-platform dropper)"],
+      ".apk": ["high","Android package (mobile malware)"],
+      ".dll": ["high","Windows library (often side-loaded malware)"],
+      ".iso": ["medium","Disk image (used to smuggle payloads past filters)"],
+      ".lnk": ["high","Windows shortcut (LNK-based loader)"],
+      ".zip": ["low","Archive (could contain a payload)"],
+      ".rar": ["low","Archive (could contain a payload)"],
+      ".hta": ["critical","HTML Application (classic malware loader)"]
+    };
+
+    var PHISHING_KEYWORDS = ["login","signin","verify","secure","account","update","confirm",
+      "password","banking","billing","invoice","suspended","unlock","security-alert","reset"];
+
+    var BRAND_KEYWORDS = ["paypal","google","microsoft","apple","amazon","facebook",
+      "instagram","netflix","bankofamerica","wellsfargo","chase","linkedin","dropbox",
+      "office365","outlook","coinbase","binance"];
+
+    var CRYPTO_KEYWORDS = ["wallet","seed-phrase","airdrop","claim-token","miner","metamask-connect"];
+    var RANSOM_KEYWORDS = ["decrypt","ransom","restore-files","your-files-are-encrypted","pay-bitcoin"];
+    var REDIRECT_PARAMS = ["redirect","url","next","return","goto","dest","continue"];
+
+    function shannonEntropy(s){
+      if (!s) return 0;
+      var counts = {};
+      for (var i = 0; i < s.length; i++){ counts[s[i]] = (counts[s[i]] || 0) + 1; }
+      var length = s.length, ent = 0;
+      Object.keys(counts).forEach(function(c){
+        var p = counts[c] / length;
+        ent -= p * (Math.log(p) / Math.LN2);
+      });
+      return ent;
+    }
+
+    function isIpAddress(host){
+      if (/^(\d{1,3}\.){3}\d{1,3}$/.test(host)) return true;
+      if (/^[0-9a-fA-F:]+$/.test(host) && host.indexOf(":") !== -1) return true;
+      return false;
+    }
+
+    function levenshtein(a, b){
+      if (a === b) return 0;
+      if (a.length === 0) return b.length;
+      if (b.length === 0) return a.length;
+      var prev = [];
+      for (var j = 0; j <= b.length; j++) prev[j] = j;
+      for (var i = 1; i <= a.length; i++){
+        var cur = [i];
+        for (j = 1; j <= b.length; j++){
+          cur[j] = Math.min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (a[i-1] !== b[j-1] ? 1 : 0));
+        }
+        prev = cur;
+      }
+      return prev[b.length];
+    }
+
+    function getNetloc(url){
+      var m = url.match(/^[a-zA-Z]+:\/\/([^/?#]*)/);
+      return m ? m[1] : "";
+    }
+
+    function analyze(rawUrl){
+      var findings = [];
+      function add(id, label, severity, detail, triggered, category){
+        findings.push({
+          id: id, label: label,
+          severity: triggered ? severity : "info",
+          detail: detail || "",
+          triggered: !!triggered,
+          category: triggered ? (category || null) : null
+        });
+      }
+
+      var url = rawUrl.trim();
+      if (!/^[a-zA-Z]+:\/\//.test(url)) url = "http://" + url;
+
+      var parsed;
+      try { parsed = new URL(url); }
+      catch(e){ return { error: "Couldn't parse that as a URL." }; }
+
+      var host = parsed.hostname || "";
+      var path = parsed.pathname || "";
+      var query = (parsed.search || "").replace(/^\?/, "");
+      var fullLower = url.toLowerCase();
+      var netloc = getNetloc(url);
+
+      var isIp = isIpAddress(host);
+      add("ip_host", "Domain is a raw IP address", "high",
+        "Legitimate services almost always use a registered domain name, not a bare IP.",
+        isIp, "Malware hosting / C2 infrastructure");
+
+      var hasAt = netloc.indexOf("@") !== -1;
+      add("at_symbol", "'@' symbol in URL", "medium",
+        "Everything before '@' is ignored by browsers, a classic way to disguise the real destination.",
+        hasAt, "Phishing (disguised destination)");
+
+      var tld = host.indexOf(".") !== -1 ? host.split(".").pop().toLowerCase() : "";
+      var badTld = SUSPICIOUS_TLDS.indexOf(tld) !== -1;
+      add("suspicious_tld", "Uncommon/high-abuse TLD (." + tld + ")", "medium",
+        "This top-level domain is frequently used in phishing/malware campaigns due to low registration cost.",
+        badTld, "Phishing / disposable malware infrastructure");
+
+      var longUrl = url.length > 100;
+      add("url_length", "Unusually long URL", "low",
+        "URL is " + url.length + " characters. Long URLs are sometimes used to hide the real domain or bury payload paths.",
+        longUrl);
+
+      var subdomainCount = (host.match(/\./g) || []).length;
+      var manySubs = subdomainCount >= 4;
+      add("subdomains", "Excessive subdomains", "medium",
+        "Host has " + subdomainCount + " dot-separated segments. Attackers stack subdomains to bury a fake brand name deep in the string.",
+        manySubs);
+
+      var hasPunycode = host.indexOf("xn--") !== -1;
+      add("punycode", "Punycode (internationalized domain) detected", "high",
+        "Punycode can render as lookalike characters (e.g. Cyrillic 'а' vs Latin 'a'), used for homograph phishing.",
+        hasPunycode, "Homograph phishing / brand impersonation");
+
+      var isShortener = URL_SHORTENERS.indexOf(host) !== -1;
+      add("shortener", "Known URL-shortening service", "medium",
+        "Shorteners hide the real destination until the link is clicked, commonly used to bypass link filters.",
+        isShortener, "Obfuscated redirect");
+
+      var matchedKw = PHISHING_KEYWORDS.filter(function(k){ return fullLower.indexOf(k) !== -1; });
+      add("phish_keywords", "Credential/account-themed wording", "medium",
+        matchedKw.length ? "Found term(s): " + matchedKw.join(", ") + "." : "",
+        matchedKw.length > 0, "Phishing (credential harvesting)");
+
+      var extMatch = path.toLowerCase().match(/(\.[a-z0-9]{2,4})$/);
+      var extHit = extMatch && SUSPICIOUS_EXTENSIONS[extMatch[1]] ? extMatch[1] : null;
+      var doubleExt = /\.(pdf|doc|docx|xls|jpg|png)\.(exe|scr|bat|js|vbs|cmd|hta)$/.test(path.toLowerCase());
+
+      if (extHit){
+        var sevCat = SUSPICIOUS_EXTENSIONS[extHit];
+        add("file_ext", "Direct link to executable-type file (" + extHit + ")", sevCat[0],
+          "The URL points straight at a file type commonly used to deliver malware payloads.",
+          true, sevCat[1]);
+      } else {
+        add("file_ext", "Direct link to executable-type file", "high", "", false);
+      }
+
+      add("double_ext", "Disguised double file extension", "critical",
+        "Filename hides a real executable behind a fake document/image extension (e.g. invoice.pdf.exe).",
+        doubleExt, "Disguised executable / Trojan");
+
+      var port = parsed.port ? parseInt(parsed.port, 10) : null;
+      var oddPort = port !== null && port !== 80 && port !== 443;
+      add("port", "Non-standard port", "low",
+        "URL specifies port " + port + ", unusual for normal web traffic.",
+        oddPort);
+
+      var isHttp = parsed.protocol === "http:";
+      add("no_https", "No HTTPS encryption", "low",
+        "Traffic isn't encrypted; on its own this is common but it removes a layer of trust signal.",
+        isHttp);
+
+      var pctCount = (fullLower.match(/%/g) || []).length;
+      var heavyEncoding = pctCount >= 4;
+      add("encoding", "Heavy percent-encoding", "medium",
+        "Found " + pctCount + " encoded characters, sometimes used to obscure suspicious text from quick review.",
+        heavyEncoding);
+
+      var hostParts = host.split(".");
+      var domainCore = hostParts.length >= 2 ? hostParts[hostParts.length - 2] : host;
+      var typoHits = [];
+      BRAND_KEYWORDS.forEach(function(brand){
+        if (domainCore === brand) return;
+        var dist = levenshtein(domainCore, brand);
+        if (dist > 0 && dist <= 2 && domainCore.length >= 4) typoHits.push(brand);
+      });
+      add("typosquat", "Possible brand typosquatting", "high",
+        typoHits.length ? "Domain '" + domainCore + "' closely resembles: " + typoHits.join(", ") + "." : "",
+        typoHits.length > 0, "Phishing / brand impersonation");
+
+      var qs = new URLSearchParams(query);
+      var redirectHits = [];
+      qs.forEach(function(v, k){ if (REDIRECT_PARAMS.indexOf(k) !== -1) redirectHits.push(k); });
+      add("redirect_param", "Redirect-style query parameter", "medium",
+        redirectHits.length ? "Query includes a parameter like '" + redirectHits[0] + "' that can forward to another site." : "",
+        redirectHits.length > 0, "Open redirect abuse");
+
+      var isDataUri = fullLower.indexOf("data:") === 0;
+      add("data_uri", "data: URI scheme", "critical",
+        "Embeds executable content directly in the link itself rather than linking to a page.",
+        isDataUri, "Embedded payload");
+
+      var firstLabel = host ? host.split(".")[0] : "";
+      var entropy = shannonEntropy(firstLabel);
+      var dgaLike = firstLabel.length >= 10 && entropy >= 3.6;
+      add("entropy", "High-entropy / random-looking subdomain", "medium",
+        "Subdomain '" + firstLabel + "' looks machine-generated (entropy " + entropy.toFixed(2) + "), a pattern seen in malware C2 domains.",
+        dgaLike, "Malware distribution / DGA-based C2");
+
+      var cryptoHit = CRYPTO_KEYWORDS.filter(function(k){ return fullLower.indexOf(k) !== -1; });
+      add("crypto", "Crypto-wallet drainer wording", "high",
+        cryptoHit.length ? "Found term(s): " + cryptoHit.join(", ") + "." : "",
+        cryptoHit.length > 0, "Cryptocurrency wallet drainer / scam");
+
+      var ransomHit = RANSOM_KEYWORDS.filter(function(k){ return fullLower.indexOf(k) !== -1; });
+      add("ransom", "Ransomware-themed wording", "high",
+        ransomHit.length ? "Found term(s): " + ransomHit.join(", ") + "." : "",
+        ransomHit.length > 0, "Ransomware notice / extortion page");
+
+      var triggered = findings.filter(function(f){ return f.triggered; });
+      var score = triggered.reduce(function(sum, f){ return sum + SEVERITY_WEIGHTS[f.severity]; }, 0);
+      score = Math.min(score, 100);
+
+      var riskLevel = score >= 70 ? "critical" : score >= 45 ? "high" : score >= 15 ? "medium" : "low";
+
+      var categories = [];
+      triggered.forEach(function(f){
+        if (f.category && categories.indexOf(f.category) === -1) categories.push(f.category);
+      });
+
+      return {
+        input_url: rawUrl, normalized_url: url, host: host,
+        score: score, risk_level: riskLevel, findings: findings, likely_categories: categories
+      };
+    }
+
+    return { analyze: analyze };
+  })();
+
+  (function(){
+    var input = document.getElementById('demoInput');
+    var btn = document.getElementById('demoScanBtn');
+    var placeholder = document.getElementById('demoPlaceholder');
+    var results = document.getElementById('demoResults');
+    var exampleBtns = document.querySelectorAll('.demo-example-btn');
+
+    function escapeHtml(s){
+      var d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    function render(result){
+      placeholder.style.display = 'none';
+      results.classList.add('active');
+
+      if (result.error){
+        results.innerHTML = '<div class="demo-error">' + escapeHtml(result.error) + '</div>';
+        return;
+      }
+
+      var html = '<div class="demo-summary">';
+      html += '<span class="demo-risk-badge ' + result.risk_level + '">' + result.risk_level.toUpperCase() + ' RISK</span>';
+      html += '<span class="demo-score">score: ' + result.score + '/100</span>';
+      html += '<span class="demo-host">' + escapeHtml(result.host || result.normalized_url) + '</span>';
+      html += '</div>';
+
+      if (result.likely_categories.length){
+        html += '<div class="demo-categories">';
+        result.likely_categories.forEach(function(c){
+          html += '<span class="demo-cat-chip">' + escapeHtml(c) + '</span>';
+        });
+        html += '</div>';
+      }
+
+      html += '<div class="demo-log-label">SCAN LOG // ' + result.findings.length + ' CHECKS</div>';
+      html += '<div class="demo-log">';
+      result.findings.forEach(function(f){
+        var cls = f.triggered ? 'triggered ' + f.severity : 'info';
+        var icon = f.triggered ? (f.severity === 'critical' || f.severity === 'high' ? '✕' : '!') : '·';
+        html += '<div class="demo-log-row ' + cls + '">';
+        html += '<span class="demo-log-icon">' + icon + '</span>';
+        html += '<div class="demo-log-body"><div class="lbl">' + escapeHtml(f.label) + '</div>';
+        if (f.detail) html += '<div class="det">' + escapeHtml(f.detail) + '</div>';
+        html += '</div></div>';
+      });
+      html += '</div>';
+
+      results.innerHTML = html;
+    }
+
+    function runScan(){
+      var val = input.value.trim();
+      if (!val) return;
+      var result = LinkScanner.analyze(val);
+      render(result);
+    }
+
+    btn.addEventListener('click', runScan);
+    input.addEventListener('keydown', function(e){ if (e.key === 'Enter') runScan(); });
+    exampleBtns.forEach(function(b){
+      b.addEventListener('click', function(){
+        input.value = b.getAttribute('data-url');
+        runScan();
+      });
+    });
+  })();
+
+  /* ---------------- MOBILE MENU ---------------- */
+  var navToggle = document.getElementById('navToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', function(){
+    var open = mobileMenu.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.textContent = open ? '✕' : '☰';
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      mobileMenu.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.textContent = '☰';
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
