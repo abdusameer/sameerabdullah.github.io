@@ -278,6 +278,21 @@ section, header, footer{ position:relative; z-index:1; }
 .profile-row .k{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); letter-spacing:0.05em; padding-top:2px; }
 .profile-row .v{ font-weight:600; text-align:right; }
 
+.profile-highlight{
+  background:var(--accent-soft); border:1px solid var(--accent-border); border-radius:8px;
+  padding:14px 16px; margin-bottom:16px; display:flex; align-items:flex-start; gap:10px;
+}
+.profile-highlight .pulse{
+  width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto; margin-top:5px;
+  box-shadow:0 0 0 0 rgba(62,207,142,0.45);
+  animation:pulse-dot calc(2s / max(var(--dur),0.001)) ease-in-out infinite;
+}
+.profile-highlight-body .hl-label{
+  font-family:var(--font-mono); font-size:10px; color:var(--accent); letter-spacing:0.08em; margin-bottom:4px;
+}
+.profile-highlight-body .hl-value{ font-size:13.5px; font-weight:600; line-height:1.4; }
+.profile-highlight-body .hl-sub{ font-size:12px; color:var(--text-dim); margin-top:2px; }
+
 /* ---------------- EDUCATION + CERTS ---------------- */
 .edu-grid{ display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:start; }
 @media (max-width:800px){ .edu-grid{ grid-template-columns:1fr; gap:32px; } }
@@ -602,12 +617,23 @@ footer{ border-top:1px solid var(--border); padding:48px 0 32px; }
       <div class="about-grid">
         <div class="about-copy reveal">
           <h2 class="section-heading">SECURITY-MINDED.<br>SYSTEM-FOCUSED.</h2>
-          <p>I'm a senior Computer Science student at Cal State LA (CSULA) specializing in Cybersecurity and Artificial Intelligence, and most of my growth has come from pushing myself to learn outside the classroom. I like building things that challenge me — especially when I have to figure out something I haven't worked with before.</p>
-          <p>That's shown up in tools like an offline URL threat scanner and a network traffic analyzer, in the Google Cybersecurity Professional Certificate (with CompTIA Security+ in progress), and right now in a senior design project I'm building with a larger team. I'm looking for an opportunity where I can contribute what I know, learn from people more experienced than me, and keep becoming a better engineer.</p>
-          <p style="color:var(--text-dim); font-size:15.5px; margin-top:24px; padding-top:20px; border-top:1px solid var(--border);"><strong style="color:var(--text); font-size:15.5px; display:block; margin-bottom:8px;">Beyond the Screen</strong>Outside of school and work, I'm usually playing basketball, hiking, traveling with friends and family, or hunting down a new place to eat. Being outdoors and meeting new people keeps me curious — and I try to carry that same mindset into my work: explore, learn, and don't stay in one place.</p>
+          <p>I'm a senior Computer Science student at Cal State LA with a focus on Cybersecurity and Artificial Intelligence. What I enjoy most about technology is understanding how systems work, finding where they can break, and figuring out how to make them better.</p>
+          <p>A lot of my growth has come from pushing beyond what I learn in the classroom. I like taking on projects where I don't already know the answer and have to learn my way through the problem. That mindset has led me to build projects like an offline URL threat scanner and a network traffic analyzer, earn the Google Cybersecurity Professional Certificate, begin preparing for CompTIA Security+, and serve as AI &amp; Security Lead on my senior design project.</p>
+          <p>Cybersecurity interests me because it combines problem-solving, programming, networking, and the responsibility of protecting real people and systems. I want to become the kind of engineer who can understand a system deeply, recognize its weaknesses, and build solutions that are both secure and practical.</p>
+          <p>Right now, I'm looking for opportunities where I can contribute what I already know while learning from engineers with more experience than me. I'm still early in my career, and that's something I embrace. I want to keep building, keep asking questions, and become better every time I work on something new.</p>
+          <p style="color:var(--text-dim); font-size:15.5px; margin-top:24px; padding-top:20px; border-top:1px solid var(--border);"><strong style="color:var(--text); font-size:15.5px; display:block; margin-bottom:8px;">Beyond the Screen</strong>Technology is a big part of my life, but it isn't all of it. Outside of school and projects, you'll usually find me playing basketball, hiking, traveling with friends and family, or looking for a new place to eat.</p>
+          <p style="color:var(--text-dim); font-size:15.5px;">I enjoy being outdoors, exploring unfamiliar places, and meeting new people. It keeps me curious, and that curiosity carries directly into the way I approach technology: explore, understand, experiment, and never get too comfortable staying in one place.</p>
         </div>
         <div class="profile-card reveal">
           <div class="card-label">SYSTEM PROFILE</div>
+          <div class="profile-highlight">
+            <span class="pulse" aria-hidden="true"></span>
+            <div class="profile-highlight-body">
+              <div class="hl-label">CURRENT ROLE</div>
+              <div class="hl-value">AI &amp; Security Lead</div>
+              <div class="hl-sub">Senior Design Project</div>
+            </div>
+          </div>
           <div class="profile-row"><span class="k">ROLE</span><span class="v">Computer Science Student</span></div>
           <div class="profile-row"><span class="k">CLASS STANDING</span><span class="v">Senior</span></div>
           <div class="profile-row"><span class="k">SPECIALIZATION</span><span class="v">Cybersecurity + AI</span></div>
